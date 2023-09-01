@@ -8,37 +8,43 @@ const productos = [
   {nombre: "Zapato rojo", tipo: "zapato", color: "rojo", img: "./zapato-rojo.jpg"}
 ]
 
-const li = document.getElementsByName("lista-de-productos")
-const $i = document.querySelector('.input');
+let listaProductos = document.querySelector("#lista-de-productos") /* cambie el tipo de query selector */
+const $i = document.querySelector('.input-productos');
 
-for (let i = 0; i < productos.length; i++) {
-  var d = document.createElement("div")
-  d.classList.add("producto")
-
-  var ti = document.createElement("p")
-  ti.classList.add("titulo")
-  ti.textContent = productos[i].nombre
+/* creamos una funcion que desplega los productos en el DOM */
+function displayProductos(productos){
+  for (let i = 0; i < productos.length; i++) {
+    /* cambie el nombre de las variables y el tipo a const */
+    let d = document.createElement("div")
+    d.classList.add("producto")
   
-  var imagen = document.createElement("img");
-  imagen.setAttribute('src', productos[i].img);
-
-  d.appendChild(ti)
-  d.appendChild(imagen)
-
-  li.appendChild(d)
+    const title = document.createElement("p")
+    title.classList.add("titulo")
+    title.textContent = productos[i].nombre
+    
+    const imagen = document.createElement("img");
+    imagen.setAttribute('src', productos[i].img);
+  
+    d.appendChild(title)
+    d.appendChild(imagen)
+  
+    listaProductos.appendChild(d)
+  }
 }
+
 
 displayProductos(productos)
 const botonDeFiltro = document.querySelector("button");
 
 botonDeFiltro.onclick = function() {
-  while (li.firstChild) {
-    li.removeChild(li.firstChild);
+  while (listaProductos.firstChild) {
+    listaProductos.removeChild(listaProductos.firstChild);
   }
 
-  const texto = $i.value;
+  const texto = $i.value.toLowerCase(); /* agregue una funcion para que el valor lo convierta a minusculas */
   console.log(texto);
   const productosFiltrados = filtrado(productos, texto );
+  console.log(productosFiltrados)
 
   for (let i = 0; i < productosFiltrados.length; i++) {
     var d = document.createElement("div")
@@ -54,10 +60,11 @@ botonDeFiltro.onclick = function() {
     d.appendChild(ti)
     d.appendChild(imagen)
   
-    li.appendChild(d)
+    listaProductos.appendChild(d)
   }
 }
 
 const filtrado = (productos = [], texto) => {
   return productos.filter(item => item.tipo.includes(texto) || item.color.includes(texto));
 }  
+
